@@ -1,4 +1,4 @@
-package org.uka0001;
+package org.uka0001.MeetingRealisation;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class X {
     String name;
-    List <X> list;
+    List<X> list;
     Boolean flag;
 
 }

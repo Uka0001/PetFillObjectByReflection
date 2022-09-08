@@ -1,61 +1,57 @@
 package org.uka0001;
 
-import jdk.internal.org.objectweb.asm.TypeReference;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.uka0001.model.Person;
+import org.uka0001.service.MockGenerator;
+
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.Queue;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList <String> list = new ArrayList<>();
-        TypeReference <Integer> token = new TypeReference() {}
-        System.out.println(populate(list));
-    }
+        MockGenerator mockGenerator = new MockGenerator(7, 8);
 
-    static Map<Class<?>, Supplier<Object>> generator = new LinkedHashMap<>();
-    static List<String> list = new ArrayList<>();
-    TypeReference <Map<String, Integer>> typeReference = new TypeReference<Map<String, Integer>>();
+        TypeReference<String> stringTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(stringTypeReference.getType())
+                .toString());
 
+        TypeReference<Integer> integerTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(integerTypeReference.getType())
+                .toString());
 
-    static {
-        generator.put(Integer.class, () -> 1);
-        generator.put(Boolean.class, () -> true);
-        generator.put(String.class, () -> "Hello");
-    }
+        TypeReference<List<String>> listTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(listTypeReference.getType())
+                .toString());
+        TypeReference<Set<String>> setTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(setTypeReference.getType())
+                .toString());
 
-    private static <T> Object populate(ArrayList<String> x) {
-        if (isSimpleType(x)) {
-            return generator.get(x).get();
-        } else {
-            if (isCollection(x.getClass())) {
-                if(List.class.isAssignableFrom(x.getClass())){
+        TypeReference<Queue<String>> queueTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(queueTypeReference.getType())
+                .toString());
 
-                }
-            } else {
-                //TODO cought Class
-            }
+        TypeReference<Map<String, List<Float>>> mapTypeReference = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(mapTypeReference.getType())
+                .toString());
 
-        }
-        return null;
-    }
+        TypeReference<Person> personTypeReference = new TypeReference<>() {
+        };
+        Person person = mockGenerator.startMockGenerator(personTypeReference.getType());
+        System.out.println(person);
 
-    private static boolean isCollection(Class<?> x) {
-        return List.class.isAssignableFrom(x) || Map.class.isAssignableFrom(x);
-    }
-
-    private static boolean isSimpleType(Object x) {
-        return generator.containsKey(x);
-    }
-
-    private <T> Type[] nestedTypes (Type typeRef) {
-        return typeRef instanceof ParameterizedType ?
-                ((ParameterizedType) typeRef)
-                        .getActualTypeArguments() : new Type[] {typeRef};
-
+        TypeReference<Map<String, List<List<Person>>>> complexTypeReference
+                = new TypeReference<>() {
+        };
+        System.out.println(mockGenerator.startMockGenerator(complexTypeReference.getType())
+                .toString());
     }
 }
